@@ -150,9 +150,9 @@ impl World {
         collider.pos = pos;
     }
 
-    pub fn descent(&mut self, actor: Actor, descent: bool) {
+    pub fn descent(&mut self, actor: Actor) {
         let collider = &mut self.actors[actor.0].1;
-        collider.descent = descent;
+        collider.descent = true;
     }
 
     pub fn move_v(&mut self, actor: Actor, dy: f32) -> bool {
@@ -182,8 +182,8 @@ impl World {
                     collider.seen_wood = true;
                     collider.descent = true;
                 }
-                // collider got away from woods but was in the woods in this jump
-                if tile != Tile::JumpThrough && collider.seen_wood {
+                // falled out of the wood, reset descent request
+                if tile != Tile::JumpThrough {
                     collider.seen_wood = false;
                     collider.descent = false;
                 }
@@ -197,6 +197,14 @@ impl World {
                 }
             }
         }
+
+        // Final check, if we are out of woods after the move - reset wood flags
+        let tile = self.collide_solids(collider.pos, collider.width, collider.height);
+        if tile != Tile::JumpThrough {
+            collider.seen_wood = false;
+            collider.descent = false;
+        }
+
         self.actors[id].1 = collider;
         true
     }

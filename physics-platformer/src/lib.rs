@@ -182,11 +182,6 @@ impl World {
                     collider.seen_wood = true;
                     collider.descent = true;
                 }
-                // falled out of the wood, reset descent request
-                if tile != Tile::JumpThrough {
-                    collider.seen_wood = false;
-                    collider.descent = false;
-                }
                 if tile == Tile::Empty || (tile == Tile::JumpThrough && collider.descent) {
                     collider.pos.y += sign as f32;
                     move_ -= sign;

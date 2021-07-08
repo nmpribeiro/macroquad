@@ -204,10 +204,10 @@ impl World {
         true
     }
 
-    pub fn move_h(&mut self, actor: Actor, dy: f32) -> bool {
+    pub fn move_h(&mut self, actor: Actor, dx: f32) -> bool {
         let id = actor.0;
         let mut collider = self.actors[id].1.clone();
-        collider.x_remainder += dy;
+        collider.x_remainder += dx;
 
         let mut move_ = collider.x_remainder.round() as i32;
         if move_ != 0 {

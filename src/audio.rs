@@ -79,6 +79,7 @@ pub struct Sound(usize);
 /// Attempts to automatically detect the format of the source of data.
 pub async fn load_sound(path: &str) -> Result<Sound, crate::file::FileError> {
     let data = load_file(path).await?;
+
     load_sound_from_bytes(&data).await
 }
 
@@ -88,6 +89,13 @@ pub async fn load_sound(path: &str) -> Result<Sound, crate::file::FileError> {
 pub async fn load_sound_from_bytes(data: &[u8]) -> Result<Sound, crate::file::FileError> {
     let ctx = &mut get_context().audio_context;
     let sound = QuadSndSound::load(&mut ctx.native_ctx, &data);
+
+    // only on wasm the sound is not ready right away
+    #[cfg(target_arch = "wasm32")]
+    while sound.is_loaded() {
+        crate::window::next_frame().await;
+    }
+
     let id = ctx.id;
     ctx.sounds.insert(id, sound);
     ctx.id += 1;

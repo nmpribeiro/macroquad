@@ -34,7 +34,7 @@ macroquad_macro = { version = "0.1.5", path = "macroquad_macro" }
 fontdue = "0.5.0"
 bumpalo = "3.4"
 backtrace = { version = "0.3.60", optional = true, default-features = false, features = [ "std", "libbacktrace" ] }
-quad-snd = { git = "https://github.com/not-fl3/quad-snd.git", rev = "a0560f4", optional = true }
+quad-snd = { version = "0.2", optional = true }
 
 [dev-dependencies]
 macroquad-particles = { path = "./particles" }
